@@ -1,6 +1,8 @@
-DROP TABLE expenses;
-DROP TABLE labels;
-DROP TABLE users;
+DROP TABLE IF EXISTS expenses;
+DROP TABLE IF EXISTS labels;
+DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS tokens;
+
 CREATE TABLE Users (
   id SERIAL PRIMARY KEY,
   email VARCHAR(255) UNIQUE NOT NULL,
@@ -8,12 +10,17 @@ CREATE TABLE Users (
   full_name VARCHAR(255),
   date_of_birth DATE,
   profile_picture_url VARCHAR(255),
-  auth_token TEXT,
-  refresh_token TEXT,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE Tokens (
+  id SERIAL PRIMARY KEY,
+  user_id INTEGER REFERENCES Users(id),
+  auth_token TEXT,
+  refresh_token TEXT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
 
 CREATE TABLE Labels (
   id SERIAL PRIMARY KEY,
@@ -21,7 +28,6 @@ CREATE TABLE Labels (
   name VARCHAR(255) NOT NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-
 
 CREATE TABLE Expenses (
   id SERIAL PRIMARY KEY,
